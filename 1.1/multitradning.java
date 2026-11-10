@@ -1,5 +1,5 @@
 //private volatile boolean running = true;
-
+/*
 class StartProgram {
     public static void main(String[] args) {
     
@@ -76,3 +76,4 @@ class T2 implements Runnable {
         //running = false;
     }
 }
+    */
