@@ -14,9 +14,7 @@ public class ClientReceiver {
         int port = 2000;
 
         try {
-            if (args.length == 0) {
-                return;
-            } else if (args.length == 1) {
+            if (args.length == 1) {
                 host = args[0];
                 port = 2000;
             } else if (args.length == 2) {
@@ -30,7 +28,7 @@ public class ClientReceiver {
         try {
             try (Socket socket = new Socket(host, port)) {
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
-                    showMessageInChattWindow(reader);
+                    receiveMessageFromChattServer(reader);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -41,7 +39,7 @@ public class ClientReceiver {
         }
     }
 
-    public static void showMessageInChattWindow(BufferedReader reader) {
+    public static void receiveMessageFromChattServer(BufferedReader reader) {
 
         Thread thread = new Thread();
 
@@ -51,7 +49,7 @@ public class ClientReceiver {
             while (true) {
                 String message = reader.readLine();
                 if (message != null) {
-                    System.out.println(message);
+                    showMessageInChattWindow(message);
                 }
             }
 
@@ -61,10 +59,8 @@ public class ClientReceiver {
 
     }
 
-
-    public static void receiveMessageFromChattServer() {
-        //BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
-    
+    public static void showMessageInChattWindow(String message) {
+        System.out.println(message);
     }
 
 }

@@ -2,6 +2,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.io.OutputStreamWriter;
+import java.io.BufferedReader;
 import java.io.IOException;
 
 public class ClientSender {
@@ -12,9 +13,7 @@ public class ClientSender {
         int port = 2000;
 
         try {
-            if (args.length == 0) {
-                return;
-            } else if (args.length == 1) {
+            if (args.length == 1) {
                 host = args[0];
                 port = 2000;
             } else if (args.length == 2) {
@@ -43,6 +42,30 @@ public class ClientSender {
 
     public static void sendMessageToChattServer(PrintWriter writer) {
         
+    }
+
+    public static void receiveMessageFromChattServer(BufferedReader reader) {
+
+        Thread thread = new Thread();
+
+        try {
+            thread.start();
+
+            while (true) {
+                String message = reader.readLine();
+                if (message != null) {
+                    showMessageInChattWindow(message);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void showMessageInChattWindow(String message) {
+        System.out.println(message);
     }
 
 }
