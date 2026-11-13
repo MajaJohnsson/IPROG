@@ -4,24 +4,20 @@ import java.nio.charset.StandardCharsets;
 import java.io.OutputStreamWriter;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class ClientSender {
 
-    //PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
     public static void main(String[] args) {
         String host = "127.0.0.1";
         int port = 2000;
 
-        try {
-            if (args.length == 1) {
-                host = args[0];
-                port = 2000;
-            } else if (args.length == 2) {
-                host = args[0];
-                port = Integer.parseInt(args[1]);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (args.length == 1) {
+            host = args[0];
+            port = 2000;
+        } else if (args.length == 2) {
+            host = args[0];
+            port = Integer.parseInt(args[1]);
         }
 
         try (Socket socket = new Socket(host, port)) {
@@ -30,6 +26,7 @@ public class ClientSender {
             try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true)) {
                 sendMessageToChattServer(writer);
             } catch (IOException e) {
+                System.out.println("Error: Misslyckades med att skicka meddelande till servern");
                 e.printStackTrace();
             }
 
@@ -41,31 +38,24 @@ public class ClientSender {
     }
 
     public static void sendMessageToChattServer(PrintWriter writer) {
-        
-    }
-
-    public static void receiveMessageFromChattServer(BufferedReader reader) {
-
-        Thread thread = new Thread();
+        //AI användes för att förstå hur man kan läsa in från tangentbordet med en bufferedreader
+        BufferedReader keyboardReader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
+        String message = "";
 
         try {
-            thread.start();
-
-            while (true) {
-                String message = reader.readLine();
-                if (message != null) {
-                    showMessageInChattWindow(message);
+            while ((message = keyboardReader.readLine()) != null) {
+                try {
+                    writer.println(message);
+                } catch (Exception e) {
+                    System.out.println("Error: Misslyckades med att skicka meddelande till servern");
+                    e.printStackTrace();
                 }
             }
-
-        } catch (Exception e) {
+        } catch (IOException e) {
+            System.out.println("Error: Misslyckades med att läsa från tangentbordet");
             e.printStackTrace();
         }
 
-    }
-
-    public static void showMessageInChattWindow(String message) {
-        System.out.println(message);
     }
 
 }
